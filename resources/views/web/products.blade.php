@@ -1,4 +1,4 @@
-<x-web-layout title="Productos">
+<x-web-layout title="{{ $category->label }}">
 	@push('styles')
 	<style>
 		/* Chrome, Safari, Edge, Opera */
@@ -14,7 +14,7 @@
 		}
 	</style>
 	@endpush
-
+	@section('title',  $category->label)
 	@section('background', asset('img/slide1.jpg'))
 
 	@section('content')
@@ -44,15 +44,19 @@
 		</nav>
 
 		@if ($category->subcategories->isNotEmpty())
-			<div class="my-2 p-2 rounded-lg bg-gray-300 h-64 overflow-x-auto flex flex-col flex-wrap">
-				@foreach($category->subcategories as $subcategory)
-					<div class="m-2 p-2 bg-white shadow-md">
-						<a href="{{ route('products').'?category='.$subcategory->rowid }}" class="block">
-							<h4 class="text-cdsolec-blue-light font-bold">{{ $subcategory->label }}</h4>
-							<p class="text-xs">({{ $subcategory->products->count() }} Resultados)</p>
-						</a>
-					</div>
-				@endforeach
+			<div class="my-2 p-2 rounded-lg bg-gray-300 ">
+				<h3 class="w-full   p-2">Subcategorias</h3>
+				<div class="  max-h-64  overflow-x-auto flex flex-col flex-wrap">
+					@foreach($category->subcategories as $subcategory)
+						<div class="m-2 p-2 bg-white shadow-md">
+							<a href="{{ route('products').'?category='.$subcategory->rowid }}" class="block">
+								<h4 class="text-cdsolec-blue-light font-bold">{{ $subcategory->label }}</h4>
+								<p class="text-xs">({{ $subcategory->products->count() }} Resultados)</p>
+							</a>
+						</div>
+					@endforeach
+				</div>
+				
 			</div>
 		@endif
 
@@ -200,12 +204,16 @@
 						$cart = session()->get('cart', []);
 						$basket = session()->get('basket', []);
 					@endphp
+
+				<div class="flex flex-col">
+					<div class=" overflow-x-visible	 rounded-lg  bg-gray-300 overflow-x-auto flex flex-wrap relative h-12 overflow-y-auto">
+					</div>
 					<div class="rounded-lg bg-gray-300 overflow-x-auto flex flex-wrap relative h-[calc(100vh-10rem)] overflow-y-auto">
 						<table id="products" class="relative w-full rounded-lg border-collapse border border-gray-300">
 							<thead class="sticky top-0 bg-gray-300">
-								<tr class="hidden lg:table-row text-sm leading-4 tracking-wider">
-									<th class="py-3" style="min-width: 80px">&nbsp;</th>
-									<th class="py-3" style="min-width: 400px">Información</th>
+								<tr class="hidden lg:table-row text-sm leading-4 tracking-wider ">
+									<th class="py-3 " style="min-width: 80px">&nbsp;</th>
+									<th class="py-3 sticky left-0  bg-gray-300" style="min-width: 400px">Información de producto</th>
 									<th class="py-3" style="min-width: 120px">Disponiblidad</th>
 									<th class="py-3" style="min-width: 140px">Precio</th>
 									<th class="py-3" style="min-width: 140px">Cantidad</th>
@@ -219,6 +227,7 @@
 								</tr>
 							</thead>
 							<tbody class="w-full flex-1 sm:flex-none bg-white divide-y divide-gray-400 text-sm leading-5">
+								
 								@foreach ($products as $product)
 									@php
 										if (app()->environment('production')) {
@@ -255,8 +264,8 @@
 											$price_client = $price_original;
 										}
 									@endphp
-									<tr class="flex flex-col lg:table-row even:bg-gray-300">
-										<td class="border border-gray-300 flex flex-row lg:table-cell">
+									<tr class="flex flex-col lg:table-row @if($loop->iteration%2==0) bg-gray-300 @else  bg-white @endif  ">
+										<td class="border border-gray-300 flex flex-row lg:table-cell ">
 											<div class="p-2 w-32 lg:hidden bg-gray-300 text-sm leading-4 tracking-wider font-bold">
 												&nbsp;
 											</div>
@@ -264,7 +273,7 @@
 												<img src="{{ asset($image) }}" alt="{{ $product->label }}" title="{{ $product->label }}" class="w-12 ml-2 img-zoomable" />
 											</div>
 										</td>
-										<td class="border border-gray-300 flex flex-row lg:table-cell">
+										<td class="border border-gray-300 flex flex-row lg:table-cell sticky left-0 @if($loop->iteration%2==0) bg-gray-300 @else  bg-white @endif">
 											<div class="p-2 w-32 lg:hidden bg-gray-300 text-sm leading-4 tracking-wider font-bold">
 												Información
 											</div>
@@ -290,6 +299,14 @@
 											<div class="p-2 lg:text-center">
 												@if ($stock > 0)
 													Stock: {{ $stock }}
+													<form method="POST" action="{{ route('basket.store') }}">
+														@csrf
+														<input type="hidden" name="product" value="{{ $product->rowid }}" />
+														<input type="hidden" name="quantity" value="1" />
+														<button type="submit" class="px-4 py-1 font-semibold bg-cdsolec-green-dark text-white uppercase text-xs">
+															Consultar
+														</button>
+													</form>
 												@else
 													<!-- <a href="{{ route('stock', $product->ref) }}" class="inline-block px-2 py-1 font-semibold bg-cdsolec-green-dark text-white uppercase text-center" style="font-size: 0.7rem">
 														Consultar
@@ -320,7 +337,9 @@
 												Precio
 											</div>
 											<div class="p-2 lg:text-right">
-												<p class="line-through text-red-600">$USD {{ number_format($price_original->price_discount, 2, ',', '.') }}</p>
+												@if($isLogged)
+													<p  class="line-through text-red-600">$USD {{ number_format($price_original->price_discount, 2, ',', '.') }}</p>
+												@endif
 												<p class="font-bold">$USD {{ number_format($price_client->price_discount, 2, ',', '.') }}</p>
 												<p>Bs {{ number_format(($price_client->price_discount * $tasa_usd), 2, ',', '.') }}</p>
 											</div>
@@ -337,14 +356,14 @@
 														<button type="submit" class="px-4 py-1 font-semibold bg-red-600 text-white uppercase text-xs">
 															Eliminar <i class="fas fa-cart-arrow-down"></i>
 														</button>
-													</form>
+													</form >
 												@else
 													<form method="POST" action="{{ route('cart.store') }}">
 														@csrf
 														<input type="hidden" name="product" value="{{ $product->rowid }}" />
 														<div class="w-full flex pb-2">
 															<button type="button" class="px-3 py-2 border border-gray-500 font-semibold" data-action="decrement">-</button>
-															<input type="number" name="quantity" id="quantity{{ $product->rowid }}" min="0" max="{{ $stock }}" step="1" data-stock="{{ $stock }}" value="0" class="w-16 text-right px-3" onchange="validateRange(this)" />
+															<input type="number" name="quantity" id="quantity{{ $product->rowid }}" min="1" max="{{ $stock }}" step="1" data-stock="{{ $stock }}" value="1" class="w-16 text-right px-3" onchange="validateRange(this)" />
 															<button type="button" class="px-3 py-2 border border-gray-500 font-semibold" data-action="increment">+</button>
 														</div>
 														@if ($stock > 0)
@@ -379,6 +398,7 @@
 							</tbody>
 						</table>
 					</div>
+				</div>
 					<div class="mt-4 text-right">
 						{{ $products->links() }}
 					</div>

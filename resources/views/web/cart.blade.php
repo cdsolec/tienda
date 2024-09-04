@@ -22,7 +22,7 @@
 			<h6 class="text-sm uppercase font-semibold tracking-widest text-blue-800">
 				Detalle de su compra
 			</h6>
-			<h2 class="text-3xl leading-tight font-bold mt-4">Orden de Compra</h2>
+			<h2 class="text-3xl leading-tight font-bold mt-4">Carro de Compras</h2>
 
 			<div class="mx-4 mt-5 text-sm text-red-800 p-2 rounded bg-red-300 border border-red-800 {{ ($errors->any()) ? 'block' : 'hidden' }}">
 				<x-jet-validation-errors class="mb-4" />
@@ -66,6 +66,7 @@
 											<div class="leading-5 font-bold">
 												<p class="text-sm text-cdsolec-blue-light">{{ $item['label'] }}</p>
 												<p>Ref: {{ $item['ref'] }}</p>
+												<p><span class="inline-block">Comentario:</span> <input type="text" id="comentario" name="comentario" class=" inline-block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></p>
 											</div>
 										</div>
 									</td>
@@ -245,11 +246,18 @@
 								Comprar <i class="fas fa-chevron-circle-right"></i>
 							</button>
 						</form>
-						<form id="form-cart2" name="form-cart2" method="POST" action="{{ route('basket.checkout') }}" class="mt-4">
+						<!-- form id="form-cart2" name="form-cart2" method="POST" action="{{ route('basket.checkout') }}" class="mt-4">
 							@csrf
 							<input type="hidden" name="checkout_basket" id="checkout_basket" value="1" />
 							<button type="submit" class="bg-cdsolec-green-dark text-white rounded-lg px-3 py-2 hover:bg-cdsolec-green-light">
 								Presupuesto <i class="fas fa-chevron-circle-right"></i>
+							</button>
+						</form !-->
+						<form id="form-cart2" name="form-cart2" method="POST" action="{{ route('basket.checkout') }}" class="mt-4">
+							@csrf
+							<input type="hidden" name="checkout_basket" id="checkout_basket" value="1" />
+							<button type="submit" class="bg-cdsolec-green-dark text-white rounded-lg px-3 py-2 hover:bg-cdsolec-green-light">
+								Guardar carro de compras como proyecto <i class="fas fa-chevron-circle-right"></i>
 							</button>
 						</form>
 					</div>

@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
 
-	<title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
+	<title> @yield('title') | {{ config('app.name', 'Laravel') }}</title>
   <!-- Favicon -->
 	<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/favicon/favicon-32x32.png') }}" />
 
@@ -17,6 +17,8 @@
 	<link rel="stylesheet" href="{{ mix('css/app.css') }}" />
 	<link rel="stylesheet" href="{{ mix('css/cdsolec.css') }}" />
 	<link rel="stylesheet" href="{{ mix('css/megamenu.css') }}" />
+
+	<meta name="layout" content="layout">
 
 	@livewireStyles
 
@@ -52,6 +54,13 @@
   </script>
 
 	@livewireScripts
+
+	<script
+		src="https://code.jquery.com/jquery-3.7.1.js"
+		integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+		crossorigin="anonymous"></script>
+
+ 
 
 	@stack('scripts')
 </body>

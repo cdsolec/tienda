@@ -142,7 +142,15 @@ class WelcomeController extends Controller
     $sector_id = '';
     $filters = $request->except(['category', 'sector', 'search', '_token', 'page']);
 
-    if (Auth::check() && Auth::user()->society) { $price_level = Auth::user()->society->price_level; } else { $price_level = 1; }
+    $isLogged = false;
+
+    if (Auth::check() && Auth::user()->society) { 
+      $price_level = Auth::user()->society->price_level; 
+      $isLogged = true;
+
+    } else {
+       $price_level = 1; 
+    }
 
     $products = Product::query()->with([
                           'prices' => function ($query) use ($price_level) {
@@ -220,7 +228,8 @@ class WelcomeController extends Controller
                                ->with('price_level', $price_level)
                                ->with('extrafields', $extrafields)
                                ->with('attributes', $attributes)
-                               ->with('matriz', $matriz);
+                               ->with('matriz', $matriz)
+                               ->with('isLogged', $isLogged);
   }
 
   /**

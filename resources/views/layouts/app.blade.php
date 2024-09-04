@@ -18,6 +18,9 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="stylesheet" href="{{ mix('css/cdsolec.css') }}">
 
+	<meta name="layout" content="app">
+
+
         @livewireStyles
 
         <!-- Scripts -->
@@ -47,6 +50,8 @@
         @stack('modals')
         
         @stack('scripts')
+
+      
 
         @livewireScripts
     </body>

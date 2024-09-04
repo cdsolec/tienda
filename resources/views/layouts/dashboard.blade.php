@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="{{ mix('css/app.css') }}" />
 	<link rel="stylesheet" href="{{ mix('css/dashboard.css') }}" />
 
+	<meta name="description" content="dashboard">
+
+
   @livewireStyles
 
   @stack('styles')

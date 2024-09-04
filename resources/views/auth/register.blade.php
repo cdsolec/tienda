@@ -103,6 +103,13 @@
       <x-jet-button class="w-full text-center mt-4">
         {{ __('auth.Register') }}
       </x-jet-button>
+
+      <div class="mt-4">
+        <x-jet-checkbox id="remember_me" class=" " type="checkbox" name="remember_me"   autocomplete="rememberme" />
+        <x-jet-label class="inline-block" for="password_confirmation" value=" {{ __('auth.Remember_me') }}" />
+
+      </div>
+
     </form>
 
     <hr class="my-4" />
