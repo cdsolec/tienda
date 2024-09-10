@@ -182,16 +182,65 @@
 			</div>
 		</section>
 
+		<div id="myModal" class="hidden  modal-overlay fixed inset-0 flex items-center justify-center">
+			<div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+			<div class="modal-container bg-white w-1/2 mx-auto rounded shadow-lg z-50 overflow-y-auto">
+			  <img src="img/registrate.png" alt="">
+			</div>
+		  </div>
+
 		<!-- <livewire:welcome-modal /> -->
 	</main>
 
+	
 	<!-- Footer -->
 	@include('layouts.footer')
 
 	<!-- Scripts -->
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script src="{{ mix('js/welcome.js') }}"></script>
+
+	
+
+
 	<script>
+
+		$(document).ready(function(){
+
+
+			const valorDeMiCookie = obtenerValorDeCookie("modalRegistrate");
+
+			console.log("Valor de modalRegistrate:", valorDeMiCookie);
+
+			if(valorDeMiCookie!=1){
+				document.cookie = "modalRegistrate=1";
+
+				$('#myModal').removeClass('hidden');
+			}
+			
+
+			$('.modal-overlay').click(function () {
+				$('#myModal').addClass('hidden');
+			});
+
+
+
+
+
+		});
+
+		function obtenerValorDeCookie(nombre) {
+			const cookies = document.cookie.split("; ");
+			for (const cookie of cookies) {
+				const [cookieNombre, cookieValor] = cookie.split("=");
+				if (cookieNombre === nombre) {
+				return cookieValor;
+				}
+			}
+			return null;
+		}
+
+
 		// Tabs
 		function tabsMegaMenu() {
 			return {
@@ -257,6 +306,8 @@
 			
       mySlider[counter - 1].classList.remove("hidden");
     }
+
+	
   </script>
 
 	@livewireScripts

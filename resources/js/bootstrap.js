@@ -32,6 +32,8 @@ const flatpickr = require("flatpickr");
 
 window.$ = require('jquery');
 
+
+
 /**
  * DOCS Splide 
  * https://splidejs.com/
