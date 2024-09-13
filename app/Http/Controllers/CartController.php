@@ -81,6 +81,8 @@ class CartController extends Controller
    */
   public function store(Request $request)
   {
+
+    //dd($request->all());
     $data = $request->validate([
       'product' => 'required|exists:mysqlerp.llx_product,rowid',
       'quantity' => 'required|integer|min:1',
@@ -465,4 +467,66 @@ class CartController extends Controller
 
     return redirect()->back();
   }
+
+   /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function addtocart(Request $request)
+  {
+
+    $response = [
+      'error'=>0,
+      'data'=>[],
+      'mesanje'=>''
+    ];
+
+   // dd($request->all());
+    $data = $request->validate([
+      'product' => 'required|exists:mysqlerp.llx_product,rowid',
+      'quantity' => 'required|integer|min:1',
+    ]);
+    
+    try {
+      $product = Product::findOrFail($data['product']);
+      $stock = $product->stock - $product->seuil_stock_alerte;
+
+      if (($data['quantity'] > 0) && ($data['quantity'] <= $stock)) {
+
+        $cart = $request->session()->get('cart', []);
+
+        $cart[$product->rowid] = [
+          'product' => $product->rowid,
+          'quantity' => $data['quantity']
+        ];
+
+        $request->session()->put('cart', $cart);
+
+        return [
+          'error'=>0,
+          'data'=>$cart,
+          'mesanje'=>'Se ha agregado satisfactoriamente'
+        ];
+
+      } else {
+
+        return [
+          'error'=>true,
+          'data'=>[],
+          'mesanje'=>'Cantidad No Disponible'
+        ];
+      }
+    } catch (\Throwable $th) {
+      //throw $th;
+      return [
+        'error'=>true,
+        'data'=>[],
+        'mesanje'=>'Producto no encontrado'
+      ];
+    }
+  }
+
+
 }

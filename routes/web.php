@@ -47,6 +47,7 @@ Route::post('/contact', [WelcomeController::class, 'comments_store'])->name('com
 
 Route::get('/cart/reload/{type}/{id}', [CartController::class, 'reload'])->name('cart.reload');
 Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::post('/cart/addtocart', [CartController::class, 'addtocart'])->name('cart.addtocart');
 Route::apiResource('cart', CartController::class);
 
 Route::get('/basket/clear', [BasketController::class, 'clear'])->name('basket.clear');
