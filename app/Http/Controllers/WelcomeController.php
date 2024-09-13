@@ -9,9 +9,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Repositories\FournisseurRepository;
 
 class WelcomeController extends Controller
 {
+
+  public function __construct(
+    private readonly FournisseurRepository $fournisseurRepository
+    )
+    {
+    }
   /**
    * Display Dashboard.
    * 
@@ -142,14 +149,18 @@ class WelcomeController extends Controller
     $sector_id = '';
     $filters = $request->except(['category', 'sector', 'search', '_token', 'page']);
 
+    $stockInTransit= $this->fournisseurRepository->getStockInTransit();
+
+
+
     $isLogged = false;
 
     if (Auth::check() && Auth::user()->society) { 
-      $price_level = Auth::user()->society->price_level; 
+      $price_level = Auth::user()->society->price_level;
       $isLogged = true;
 
     } else {
-       $price_level = 1; 
+       $price_level = 1;
     }
 
     $products = Product::query()->with([
@@ -165,6 +176,8 @@ class WelcomeController extends Controller
                           $query->where('price_level', '=', $price_level)
                                 ->orWhere('price_level', '=', 1);
                         });
+
+                        
 
     if ($category_id != '715') {
       $products = $products->whereHas('categories', function ($query) use ($category_id) {
@@ -229,7 +242,8 @@ class WelcomeController extends Controller
                                ->with('extrafields', $extrafields)
                                ->with('attributes', $attributes)
                                ->with('matriz', $matriz)
-                               ->with('isLogged', $isLogged);
+                               ->with('isLogged', $isLogged)
+                               ->with('stockInTransit', $stockInTransit);
   }
 
   /**

@@ -257,6 +257,7 @@
 										$product_fields = $product->extrafields->toArray();
 
 										$stock = $product->stock - $product->seuil_stock_alerte;
+										$inTransit = $stockInTransit[$product->rowid]??null;
 
 										$price_original = $product->prices->where('price_level', 1)->first();
 										$price_client = $product->prices->where('price_level', $price_level)->first();
@@ -297,6 +298,7 @@
 												Disponibilidad
 											</div>
 											<div class="p-2 lg:text-center">
+												
 												@if ($stock > 0)
 													Stock: {{ $stock }}
 													<form method="POST" action="{{ route('basket.store') }}">
@@ -330,6 +332,7 @@
 														</form>
 													@endif
 												@endif
+												@if($inTransit)<p>En Transito: {{$inTransit??0}}</p>@endif
 											</div>
 										</td>
 										<td class="border border-gray-300 flex flex-row lg:table-cell">
