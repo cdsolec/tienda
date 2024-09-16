@@ -406,7 +406,7 @@ class CartController extends Controller
 
     $request->session()->forget(['cart']);
 
-    Mail::to($user->email, 'Compra CD-SOLEC')->cc('ventas@cd-solec.com', 'Compra CD-SOLEC')->send(new OrderMail($commande));
+    //Mail::to($user->email, 'Compra CD-SOLEC')->cc('ventas@cd-solec.com', 'Compra CD-SOLEC')->send(new OrderMail($commande));
 
     return redirect()->route('orders.show', $commande);
   }

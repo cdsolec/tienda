@@ -239,11 +239,11 @@
 				<div class="my-2 p-3 rounded-lg border bg-gray-300">
 					<div class="p-3 flex justify-between">
 						<div>
-							<p class="font-bold">Factura: {{ ($facture) ? $facture->ref : '' }}</p>
+							<p class="font-bold">Comprobante de Pago: {{ ($facture) ? $facture->ref : '' }}</p>
 						</div>
 						<div>
 							<a href="{{ route('orders.payments.create', $commande) }}" class="mr-2 px-3 py-2 font-semibold uppercase text-sm text-white bg-cdsolec-green-dark hover:bg-cdsolec-green-light tracking-wider rounded-md transition">
-								<i class="fas fa-dollar-sign"></i> Agregar Pago
+								<i class="fas fa-dollar-sign"></i> Comprar
 							</a>
 						</div>
 					</div>
