@@ -25,6 +25,12 @@
         <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
       </div>
 
+      <div class="mt-4">
+        <x-jet-checkbox id="remember" class=" " type="checkbox" name="remember"   autocomplete="rememberme" />
+        <x-jet-label class="inline-block" for="password_confirmation" value=" {{ __('auth.Remember_me') }}" />
+
+      </div>
+
       <x-jet-button class="w-full text-center mt-4">
         {{ __('auth.Login') }}
       </x-jet-button>
