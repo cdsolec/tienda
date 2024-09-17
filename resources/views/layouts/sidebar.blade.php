@@ -18,7 +18,7 @@
       </li>
       <li class="items-center">
         <a href="{{ route('budgets.index') }}" class="w-full py-2 text-sm block no-underline font-semibold hover:bg-gray-300 hover:text-cdsolec-green-dark hover:pl-2">
-          <i class="fas fa-shopping-basket mr-2 text-sm"></i> Presupuestos
+          <i class="fas fa-shopping-basket mr-2 text-sm"></i> Historial de cotizaciones y consultas
         </a>
       </li>
     </ul>

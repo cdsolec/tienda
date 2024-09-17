@@ -30,7 +30,7 @@
           <img src="img/logos/CD-SOLEC_Lema.png" alt="CD-SOLEC" title="CD-SOLEC" style="width: 140px;" />
         </td>
         <td style="width: 50%; text-align: right;">
-          <h1>Pedido</h1>
+          <h1>Pedido de Productos</h1>
           <h2>{{ $commande->ref }}</h2>
           <h4>Fecha: {{ $commande->date_creation->format('d/m/Y') }}</h4>
         </td>
@@ -49,6 +49,7 @@
         </td>
         <td>&nbsp;</td>
         <td style="width: 48%; background-color: #D7D4E1; padding: .5em; vertical-align: top;">
+          <h4>Datos del Cliente:</h4>
           <h4>{{ $commande->society->nom }}</h4>
           <h4>RIF: {{ $commande->society->siren }}</h4>
           <br />
