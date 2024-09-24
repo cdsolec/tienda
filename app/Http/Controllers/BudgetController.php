@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Propal;
+use App\Models\PropalExtra;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,10 +53,27 @@ class BudgetController extends Controller
    */
   public function show(Propal $propal)
   {
+
+    
     if (Auth::user()->society->rowid == $propal->fk_soc) {
+
       $commande = $propal->commandes()->first();
 
-      return view('web.budgets.show')->with('propal', $propal)->with('commande', $commande);
+      $extra = PropalExtra::where('fk_object', $propal->rowid)->first();
+
+
+
+      if(!isset($extra->rowid)){
+        $extra = PropalExtra::create([
+          'fk_object'=>$propal->rowid
+        ]);
+      }
+
+      return view('web.budgets.show')
+      ->with('propal', $propal)
+      ->with('extra', $extra)
+      ->with('commande', $commande);
+
     } else {
       return redirect()->route('budgets.index');
     }
@@ -113,7 +131,21 @@ class BudgetController extends Controller
    */
   public function name(Request $request, Propal $propal)
   {
-    $data = $request->validate(['name' => 'required|string']);
+
+      $data = $request->all();
+
+      $extra = PropalExtra::where('fk_object', $propal->rowid)->first();
+
+      if(!isset($extra->rowid)){
+        $extra = PropalExtra::create([
+          'fk_object'=>$propal->rowid
+        ]);
+      }
+
+      $extra->update([
+        'codigoproyecto'=>$data['code'],
+        'nombreproyecto'=>$data['name'],
+      ]);
 
     $propal->update(['ref_client' => $data['name']]);
 

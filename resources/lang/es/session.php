@@ -11,6 +11,7 @@ return [
   */
 
   'Profile'                  => 'Perfil',
+  'Address'                  => 'Direcciones',
   'Logout'                   => 'Salir',
   'Dashboard'                => 'Dashboard',
   'Manage_Team'              => 'Administrar Equipo',

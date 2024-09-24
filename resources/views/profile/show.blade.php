@@ -21,6 +21,12 @@
         <x-jet-section-border />
       @endif
 
+      <div class="mt-10 sm:mt-0">
+        Direcciones
+
+        
+      </div>
+
       {{-- @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
         <div class="mt-10 sm:mt-0">
           @livewire('profile.two-factor-authentication-form')

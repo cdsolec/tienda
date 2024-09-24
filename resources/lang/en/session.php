@@ -11,6 +11,7 @@ return [
   */
 
   'Profile'                  => 'Profile',
+  'Address'                  => 'Address',
   'Logout'                   => 'Logout',
   'Dashboard'                => 'Dashboard',
   'Manage_Team'              => 'Manage Team',

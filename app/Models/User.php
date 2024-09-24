@@ -74,9 +74,9 @@ class User extends Authenticatable implements Auditable
    * @var array
    */
   protected $hidden = [
-    'pass_encoding', 
-    'pass', 
-    'pass_crypted', 
+    'pass_encoding',
+    'pass',
+    'pass_crypted',
     'pass_temp',
   ];
 

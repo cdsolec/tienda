@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\OrderMail;
 use App\Models\Commande;
+use App\Models\CommandeExtra;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,7 +57,18 @@ class OrderController extends Controller
     if (Auth::user()->society->rowid == $commande->fk_soc) {
       $facture = $commande->factures()->first();
 
-      return view('web.orders.show')->with('commande', $commande)->with('facture', $facture);
+      $extra = CommandeExtra::where('fk_object', $commande->rowid)->first();
+
+      if(!isset($extra->rowid)){
+        $extra = CommandeExtra::create([
+          'fk_object'=>$commande->rowid
+        ]);
+      }
+
+      return view('web.orders.show')
+      ->with('commande', $commande)
+      ->with('extra', $extra)
+      ->with('facture', $facture);
     } else {
       return redirect()->route('orders.index');
     }
@@ -114,7 +126,22 @@ class OrderController extends Controller
    */
   public function name(Request $request, Commande $commande)
   {
-    $data = $request->validate(['name' => 'required|string']);
+
+    $data = $request->all();
+
+    $extra = CommandeExtra::where('fk_object', $commande->rowid)->first();
+
+      if(!isset($extra->rowid)){
+        $extra = CommandeExtra::create([
+          'fk_object'=>$commande->rowid
+        ]);
+      }
+
+      $extra->update([
+        'codigoproyecto'=>$data['code'],
+        'nombreproyecto'=>$data['name'],
+      ]);
+
 
     $commande->update(['ref_client' => $data['name']]);
 

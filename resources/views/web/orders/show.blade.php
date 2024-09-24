@@ -34,13 +34,26 @@
 				<div class="my-2 p-3 rounded-lg border bg-gray-300">
 					<form action="{{ route('orders.name', $commande) }}" method="POST">
 						@csrf
-						<div class="grid gap-2 md:grid-cols-4">
+						<div class="grid gap-2 md:grid-cols-3">
+							<div>								
+								<x-jet-label for="code" value="Codigo del Proyecto:" class="font-bold text-xl" />
+							</div>
+							<div class="col-span-2">
+								<x-jet-input type="text" id="code" name="code" value="{{ $extra->codigoproyecto }}" placeholder="Codigo del proyecto:" required />
+							</div>
+							
+						</div>
+						<div class="grid gap-2 md:grid-cols-3 mt-4">
 							<div>								
 								<x-jet-label for="name" value="Nombre del Proyecto:" class="font-bold text-xl" />
 							</div>
 							<div class="col-span-2">
-								<x-jet-input type="text" id="name" name="name" value="{{ $commande->ref_client }}" placeholder="Nombre del proyecto:" required />
+								<x-jet-input type="text" id="name" name="name" value="{{ $extra->nombreproyecto }}" placeholder="Nombre del proyecto:" required />
 							</div>
+							
+						</div>
+						<div class="grid gap-2 md:grid-cols-3">
+							
 							<div>
 								<x-jet-button type="submit">Guardar</x-jet-button>
 							</div>

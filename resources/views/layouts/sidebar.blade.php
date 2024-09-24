@@ -71,6 +71,11 @@
         </a>
       </li>
       <li class="inline-flex">
+        <a href="{{ route('profile.show') }}" class="w-full py-2 text-sm block no-underline font-semibold hover:bg-gray-300 hover:text-cdsolec-green-dark hover:pl-2">
+          <i class="fas fa-map mr-2 text-sm"></i> {{ __('session.Address') }}
+        </a>
+      </li>
+      <li class="inline-flex">
         <a href="#" class="w-full py-2 text-sm block no-underline font-semibold hover:bg-gray-300 hover:text-cdsolec-green-dark hover:pl-2" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
           <i class="fas fa-sign-out-alt mr-2 text-sm"></i> {{ __('session.Logout') }}
         </a>

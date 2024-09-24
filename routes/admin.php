@@ -14,6 +14,12 @@ use App\Http\Controllers\Admin\CommentController;
 | Admin Routes of Users
 |--------------------------------------------------------------------------
 */
+Route::get('/address/trash', [AddressController::class, 'trash'])->name('address.trash');
+Route::get('/address/{id}/restore', [AddressController::class, 'restore'])->name('address.restore')
+      ->where('id', '[0-9]+');
+Route::patch('/address/{id}/delete', [AddressController::class, 'delete'])->name('address.delete')
+      ->where('id', '[0-9]+');
+Route::resource('address', AddressController::class);
 
 /*
 |--------------------------------------------------------------------------
