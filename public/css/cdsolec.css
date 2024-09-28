@@ -36,3 +36,15 @@
     background: #8DFC00;
     font-weight: 600;
 }
+
+
+#btnWhatsaap{
+    position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+#btnWhatsaap img{
+  width: 60px;
+}

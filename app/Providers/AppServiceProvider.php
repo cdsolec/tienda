@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Composers\CategoriesComposer;
+use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{App, Schema, URL, View};
 
@@ -32,5 +33,11 @@ class AppServiceProvider extends ServiceProvider
     View::composer([
       'welcome', 'layouts.menu', 'web.about', 'web.brands', 'web.products', 'web.product', 'web.cart', 'web.contact'
     ], CategoriesComposer::class);
+
+    view()->composer('*', function($view) {
+        $view->with('nroWhatsapp',Setting::where('name', 'nroWhatsapp')->first()->value);
+    });
+
+
   }
 }

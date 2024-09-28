@@ -33,6 +33,17 @@
 	
 	<main class="py-14">
     @yield('content')
+
+	<button class="btn btn-default" id="btnWhatsaap">
+
+		<a target="_blank" href="{{'https://wa.me/'.intval($nroWhatsapp).'/?text=Quisiera%20mas%20informaci%C3%B3n'}}">
+	
+			<img src="{{ url('img/whatsapp.png')}}" alt="whatsapp">
+	
+		</a>
+	</button>
+
+
 	</main>
 
 	<!-- Footer -->
