@@ -32,6 +32,7 @@
 	<div class="w-full h-52 banner" style="background-image: url(@yield('background'));"></div>
 	
 	<main class="py-14">
+		
     @yield('content')
 
 	<button class="btn btn-default" id="btnWhatsaap">

@@ -11,3 +11,14 @@ input[type='number']::-webkit-outer-spin-button {
 .custom-number-input button:focus {
   outline: none !important;
 }
+
+#btnWhatsaap{
+  position: fixed;
+bottom: 20px;
+right: 20px;
+z-index: 9999;
+}
+
+#btnWhatsaap img{
+width: 60px;
+}
