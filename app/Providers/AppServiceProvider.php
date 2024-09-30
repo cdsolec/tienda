@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
     ], CategoriesComposer::class);
 
     view()->composer('*', function($view) {
-        $view->with('nroWhatsapp',Setting::where('name', 'nroWhatsapp')->first()->value);
+        $view->with('nroWhatsapp',Setting::where('name', 'nroWhatsapp')->first()->value??null);
     });
 
 
