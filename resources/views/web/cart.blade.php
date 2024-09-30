@@ -24,6 +24,19 @@
 			</h6>
 			<h2 class="text-3xl leading-tight font-bold mt-4">Carro de Compras</h2>
 
+			<!-- Inicio de Alerta  -->
+			<div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 mt-4" role="alert">
+				<svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+				  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+				</svg>
+				<span class="sr-only">Informacion </span>
+				<div>
+				  <span class="font-medium">Atencion!</span> El precio de algunos de los articulos de su carrito puede haber sido modificado.
+				</div>
+			</div>
+			<!-- Fin de Alerta  -->
+
+
 			<div class="mx-4 mt-5 text-sm text-red-800 p-2 rounded bg-red-300 border border-red-800 {{ ($errors->any()) ? 'block' : 'hidden' }}">
 				<x-jet-validation-errors class="mb-4" />
 			</div>
@@ -228,8 +241,8 @@
 					</table>
 				</div>
 				
-				<div class="flex justify-between">
-					<div>
+				<div class=" flex flex-row-reverse">
+					<!-- <div>
 						<a href="{{ route('products') }}" class="bg-cdsolec-green-light text-white rounded-lg px-3 py-2 hover:bg-cdsolec-green-dark">
 							<i class="fas fa-chevron-circle-left"></i> Agregar Productos
 						</a>
@@ -238,11 +251,11 @@
 						<a href="{{ route('cart.clear') }}" class="bg-red-500 text-white rounded-lg px-3 py-2 mx-3">
 							<i class="fas fa-times text-white"></i> Cancelar Pedido
 						</a>
-					</div>
-					<div class=" ">
+					</div> -->
+					<div class="mr-4 ">
 						<form id="form-cart" name="form-cart" method="POST" action="{{ route('cart.checkout') }}">
 							@csrf
-							<button type="submit" class="bg-cdsolec-green-dark text-white rounded-lg px-3 py-2 hover:bg-cdsolec-green-light">
+							<button type="submit" class="bg-cdsolec-green-dark text-white rounded-lg px-3 py-2 hover:bg-cdsolec-green-light mr-4">
 								Comprar <i class="fas fa-chevron-circle-right"></i>
 							</button>
 						</form>
@@ -255,7 +268,7 @@
 						</form !-->
 						
 					</div>
-					<div class=" ">
+					<div class="mr-4 ">
 						
 						<form id="form-cart2" name="form-cart2" method="POST" action="{{ route('basket.checkout') }}" class="">
 							@csrf

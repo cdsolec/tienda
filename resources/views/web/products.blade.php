@@ -204,35 +204,35 @@
 						$cart = session()->get('cart', []);
 						$basket = session()->get('basket', []);
 					@endphp
-
 				<div class="flex flex-col">
-					<div class=" overflow-x-visible	 rounded-lg  bg-gray-300 overflow-x-auto flex flex-wrap relative h-12 overflow-y-auto">
-					</div>
-					<div class="rounded-lg bg-gray-300 overflow-x-auto flex flex-wrap relative h-[calc(100vh-10rem)] overflow-y-auto">
-						<table id="products" class="relative w-full rounded-lg border-collapse border border-gray-300">
-							<thead class="sticky top-0 bg-gray-300">
-								<tr class="hidden lg:table-row text-sm leading-4 tracking-wider ">
-									<th class="py-3 " style="min-width: 80px">&nbsp;</th>
-									<th class="py-3 sticky left-0  bg-gray-300" style="min-width: 400px">Información de producto</th>
-									<th class="py-3" style="min-width: 120px">Disponiblidad</th>
-									<th class="py-3" style="min-width: 140px">Precio</th>
-									<th class="py-3" style="min-width: 140px">Cantidad</th>
-									@if ($extrafields->isNotEmpty())
-										@foreach ($extrafields as $extrafield)
-											@if (isset($attributes[$extrafield->name]) && isset($attributes[$extrafield->name.'f']) && $attributes[$extrafield->name.'f'])
-												<th class="py-3" style="min-width: 160px">{{ $attributes[$extrafield->name] }}</th>
-											@endif
-										@endforeach
-									@endif
-								</tr>
-							</thead>
-							<tbody class="w-full flex-1 sm:flex-none bg-white divide-y divide-gray-400 text-sm leading-5">
-								
-								@foreach ($products as $product)
-									@include('web.productDetail')
-								@endforeach
-							</tbody>
-						</table>
+					
+					<div class="">
+						<div id="doublescroll" class="rounded-lg bg-gray-300 overflow-x-auto flex flex-wrap relative h-[calc(100vh-10rem)] overflow-y-auto">
+							<table id="products" class="relative w-full rounded-lg border-collapse border border-gray-300">
+								<thead class="sticky top-0 bg-gray-300">
+									<tr class="hidden lg:table-row text-sm leading-4 tracking-wider ">
+										<th class="py-3 " style="min-width: 80px">&nbsp;</th>
+										<th class="py-3 sticky left-0  bg-gray-300" style="min-width: 400px">Información de producto</th>
+										<th class="py-3" style="min-width: 120px">Disponiblidad</th>
+										<th class="py-3" style="min-width: 140px">Precio</th>
+										<th class="py-3" style="min-width: 140px">Cantidad</th>
+										@if ($extrafields->isNotEmpty())
+											@foreach ($extrafields as $extrafield)
+												@if (isset($attributes[$extrafield->name]) && isset($attributes[$extrafield->name.'f']) && $attributes[$extrafield->name.'f'])
+													<th class="py-3" style="min-width: 160px">{{ $attributes[$extrafield->name] }}</th>
+												@endif
+											@endforeach
+										@endif
+									</tr>
+								</thead>
+								<tbody class="w-full flex-1 sm:flex-none bg-white divide-y divide-gray-400 text-sm leading-5">
+									
+									@foreach ($products as $product)
+										@include('web.productDetail')
+									@endforeach
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 					<div class="mt-4 text-right">
@@ -249,9 +249,84 @@
 	@endsection
 
 	@push('scripts')
+
+		
 		<script>
+			function DoubleScroll(element) {
+				/*
+				We start with this:
+				<element>
+					<firstElementChild>
+					.
+					</firstElementChild>
+				</element>
+
+
+				We end up with this:
+				<element>
+					<scroll1>
+						<scroll1Inner></scroll1>
+					</scroll1>
+					<scroll2>
+						<firstElementChild>
+						.
+						</firstElementChild>
+					</scroll2>
+				</element
+				*/
+
+				let scroll1 = document.createElement('div');
+				scroll1.classList.add('doublescroll1');
+				scroll1.style.overflowX = 'auto';
+				scroll1.style.overflowY = 'hidden';
+				scroll1.style.marginTop = '-1px';
+
+				let scroll1Inner = document.createElement('div');
+				scroll1Inner.classList.add('doublescroll-inner');
+				scroll1Inner.style.paddingTop = '1px';
+				scroll1Inner.style.width = element.firstElementChild.scrollWidth+'px';
+
+				scroll1.appendChild(scroll1Inner);
+
+				let scroll2 = document.createElement('div');
+				scroll2.classList.add('doublescroll2');
+				scroll2.style.overflowX = 'auto';
+
+				// Move the element's first node inside the scroll2 div
+				scroll2.appendChild(element.firstElementChild);
+				
+				element.appendChild(scroll1);
+				element.appendChild(scroll2);
+
+				let isRunning = false;
+
+				scroll1.onscroll = function() {
+					if (isRunning) {
+						isRunning = false;
+						return;
+					}
+
+					isRunning = true;
+					scroll2.scrollLeft = scroll1.scrollLeft;
+				};
+
+				scroll2.onscroll = function() {
+					if (isRunning) {
+						isRunning = false;
+						return;
+					}
+					
+					isRunning = true;
+					scroll1.scrollLeft = scroll2.scrollLeft;
+				};
+			}
+
+
+
 
 			var urlAddToCart = "{{route('cart.addtocart')}}";
+
+			DoubleScroll(document.getElementById('doublescroll'));
 
 			$(document).ready(function(){
 				$(document).on('click', '.addToCart', function(e){

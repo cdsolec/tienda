@@ -30,6 +30,7 @@ mix.styles(['resources/css/slider.css'], 'public/css/slider.css');
 mix.styles(['resources/css/megamenu.css'], 'public/css/megamenu.css');
 
 mix.js('resources/js/welcome.js', 'public/js');
+mix.js('resources/js/DoubleScroll.js', 'public/js');
 
 mix.copyDirectory('node_modules/tinymce/icons', 'public/js/tinymce/icons');
 mix.copyDirectory('node_modules/tinymce/plugins', 'public/js/tinymce/plugins');
