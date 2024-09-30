@@ -4,6 +4,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ContentController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\Admin\CommentController;
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes of Users
+| Admin Routes of Address
 |--------------------------------------------------------------------------
 */
 Route::get('/address/trash', [AddressController::class, 'trash'])->name('address.trash');

@@ -23,8 +23,6 @@
 
       <div class="mt-10 sm:mt-0">
         Direcciones
-
-        
       </div>
 
       {{-- @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
