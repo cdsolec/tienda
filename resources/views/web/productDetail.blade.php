@@ -70,6 +70,7 @@
             
             @if ($stock > 0)
                 Stock: {{ $stock }}
+                @if($inTransit)<p>En Transito: {{$inTransit??0}}</p>@endif
                 <form method="POST" action="{{ route('basket.store') }}">
                     @csrf
                     <input type="hidden" name="product" value="{{ $product->rowid }}" />
@@ -103,7 +104,6 @@
                     </form>
                 @endif
             @endif
-            @if($inTransit)<p>En Transito: {{$inTransit??0}}</p>@endif
         </div>
     </td>
     <td class="border border-gray-300 flex flex-row lg:table-cell">

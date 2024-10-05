@@ -39,6 +39,7 @@ Route::get('/solutions', [WelcomeController::class, 'solutions'])->name('solutio
 Route::get('/conditions', [WelcomeController::class, 'conditions'])->name('conditions');
 Route::get('/policy', [WelcomeController::class, 'policy'])->name('policy');
 Route::get('/products', [WelcomeController::class, 'products'])->name('products');
+Route::get('/category/{id}', [WelcomeController::class, 'category'])->name('category');
 Route::get('/product/{product}', [WelcomeController::class, 'product'])->name('product');
 Route::get('/product/{product}/stock', [WelcomeController::class, 'stock'])->name('stock');
 Route::post('/product/{product}/stock', [WelcomeController::class, 'stock_mail'])->name('stock.mail');

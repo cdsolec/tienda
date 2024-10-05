@@ -246,6 +246,117 @@ class WelcomeController extends Controller
                                ->with('stockInTransit', $stockInTransit);
   }
 
+
+
+  /**
+   * Display Products by category
+   * 
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function category(Request $request, $id)
+  {
+    $tasa_usd = Setting::find(2)->value;
+    $category_id = $id;
+    $category = Category::findOrFail($category_id);
+    $sector_id = '';
+    $filters = $request->except(['category', 'sector', 'search', '_token', 'page']);
+
+    $stockInTransit= $this->fournisseurRepository->getStockInTransit();
+
+    $isLogged = false;
+
+    if (Auth::check() && Auth::user()->society) { 
+      $price_level = Auth::user()->society->price_level;
+      $isLogged = true;
+
+    } else {
+       $price_level = 1;
+    }
+
+    $products = Product::query()->with([
+                          'prices' => function ($query) use ($price_level) {
+                            $query->where('price_level', '=', $price_level)
+                                  ->orWhere('price_level', '=', 1)
+                                  ->orderBy('date_price', 'desc');
+                          },
+                          'extrafields'
+                        ])
+                        ->where('tosell', '=', '1')
+                        ->whereHas('prices', function ($query) use ($price_level) {
+                          $query->where('price_level', '=', $price_level)
+                                ->orWhere('price_level', '=', 1);
+                        });
+
+                        
+
+    if ($category_id != '715') {
+      $products = $products->whereHas('categories', function ($query) use ($category_id) {
+          $query->where('fk_categorie', '=', $category_id);
+        });
+    }
+
+    if ($request->has('sector') && ($request->input('sector') != '')) {
+      $sector_id = $request->input('sector');
+      $products = $products->whereHas('categories', function ($query) use ($sector_id) {
+                              $query->where('fk_categorie', '=', $sector_id);
+                            });
+    }
+
+    $productsMatriz = $products;
+    $productsMatriz = $productsMatriz->get();
+
+    if ($request->has('search')) {
+      $search = $request->input('search');
+      $products = $products->where(function ($query) use ($search) {
+        $query->where('ref', 'like', "%{$search}%")
+              ->orWhere('label', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%");
+      });
+    }
+
+    if (count($filters) > 0) {
+      foreach ($filters as $filter => $value) {
+        $products = $products->whereHas('extrafields', function ($query) use ($filter, $value) {
+          $query->whereIn($filter, $value);
+        });
+      }
+    }
+
+    $products = $products->orderBy('rowid', 'ASC')->paginate(20);
+
+    $products->appends(request()->query());
+
+    $extrafields = Extrafield::where('elementtype', '=', 'product')->get();
+    $attributes = [];
+    $matriz = [];
+
+    if ($category->attributes) {
+      $attributes = $category->attributes->toArray();
+
+      if ($productsMatriz->isNotEmpty()) {
+        foreach ($productsMatriz as $product) {
+          if ($product->extrafields) {
+            $matriz[$product->rowid] = $product->extrafields->toArray();
+          }
+        }
+      }
+
+      $matriz = collect($matriz);
+    }
+
+    return view('web.products')->with('category', $category)
+                               ->with('products', $products)
+                               ->with('filters', $filters)
+                               ->with('tasa_usd', $tasa_usd)
+                               ->with('price_level', $price_level)
+                               ->with('extrafields', $extrafields)
+                               ->with('attributes', $attributes)
+                               ->with('matriz', $matriz)
+                               ->with('isLogged', $isLogged)
+                               ->with('stockInTransit', $stockInTransit);
+  }
+
   /**
    * Display Product.
    * 
