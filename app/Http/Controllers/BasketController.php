@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Propal, Product, Setting, User};
+use App\Models\{Propal, PropalDetailExtra, Product, Setting, User};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -227,7 +227,7 @@ class BasketController extends Controller
 
       $tva_tx = $percent_iva;
 
-      $propal->propal_detail()->create([
+      $detailPropal = $propal->propal_detail()->create([
         'fk_product' => $product->rowid,
         'label' => $product->ref,
         'description' => $product->label,
@@ -246,7 +246,16 @@ class BasketController extends Controller
         'multicurrency_total_ht' => 0,
         'multicurrency_total_tva' => 0,
         'multicurrency_total_ttc' => 0
-      ]);
+      ])->rowid;
+
+
+      if($item['comment']){
+        PropalDetailExtra::create([
+          'fk_object'=>$detailPropal,
+          'observaciones'=>$item['comment']
+        ]);
+      }
+
     }
 
     $request->session()->forget(['basket']);

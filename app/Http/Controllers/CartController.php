@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\OrderMail;
-use App\Models\{Product, Setting, User, Propal, Commande, ElementElement};
+use App\Models\{Product, Setting, User, Propal, PropalDetailExtra, Commande, CommandeDetailsExtra, ElementElement};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +28,7 @@ class CartController extends Controller
     if (Auth::check() && Auth::user()->society) { $price_level = Auth::user()->society->price_level; } else { $price_level = 1; }
 
     foreach ($cart as $item) {
+
       $product = Product::findOrFail($item['product']);
 
       $stock = $product->stock - $product->seuil_stock_alerte;
@@ -64,7 +65,8 @@ class CartController extends Controller
         'label' => $product->label,
         'price' => $price_client->price_discount,
         'stock' => $stock,
-        'quantity' => $item['quantity']
+        'quantity' => $item['quantity'],
+        'comment' => $item['comment']??null
       ];
     }
 
@@ -138,7 +140,9 @@ class CartController extends Controller
   {
     $data = $request->validate([
       'quantity' => 'required|integer|min:1',
+      'comment' => 'string',
     ]);
+
     
     try {
       $percent_iva = Setting::find(1)->value;
@@ -150,12 +154,20 @@ class CartController extends Controller
       if (Auth::check() && Auth::user()->society) { $price_level = Auth::user()->society->price_level; } else { $price_level = 1; }
 
       if (($data['quantity'] > 0) && ($data['quantity'] <= $stock)) {
+
         $cart = $request->session()->get('cart', []);
 
-        $cart[$product->rowid] = [
-          'product' => $product->rowid,
-          'quantity' => $data['quantity']
-        ];
+        if(isset($data['comment'])){
+          $cart[$product->rowid]['comment']=$data['comment'];
+        }else{
+          $cart[$product->rowid] = [
+            'product' => $product->rowid,
+            'quantity' => $data['quantity'],
+            'comment' => $cart[$product->rowid]['comment']??null
+          ];
+        }
+
+        
 
         $request->session()->put('cart', $cart);
 
@@ -310,7 +322,7 @@ class CartController extends Controller
       $total_tva = ($price_client->price_discount * $item['quantity'] * $percent_iva) / 100;
       $total_ttc = $total_ht + $total_tva;
 
-      $propal->propal_detail()->create([
+      $detailPropal = $propal->propal_detail()->create([
         'fk_product' => $product->rowid,
         'label' => $product->ref,
         'description' => $product->label,
@@ -329,7 +341,18 @@ class CartController extends Controller
         'multicurrency_total_ht' => $total_ht,
         'multicurrency_total_tva' => $total_tva,
         'multicurrency_total_ttc' => $total_ttc
-      ]);
+      ])->rowid;
+
+      if($item['comment']){
+        PropalDetailExtra::create([
+          'fk_object'=>$detailPropal,
+          'observaciones'=>$item['comment']
+        ]);
+      }
+      
+      
+
+
     }
     $iva_bs = ($subtotal_bs * $percent_iva) / 100;
     $iva_usd = ($subtotal_usd * $percent_iva) / 100;
@@ -375,7 +398,7 @@ class CartController extends Controller
     ]);
 
     foreach ($propal->propal_detail as $item) {
-      $commande->commande_detail()->create([
+      $detailId = $commande->commande_detail()->create([
         'fk_product' => $item->fk_product,
         'label' => $item->label,
         'description' => $item->description,
@@ -394,7 +417,19 @@ class CartController extends Controller
         'multicurrency_total_ht' => $item->multicurrency_total_ht,
         'multicurrency_total_tva' => $item->multicurrency_total_tva,
         'multicurrency_total_ttc' => $item->multicurrency_total_ttc
-      ]);
+      ])->rowid;
+
+      $comments = PropalDetailExtra::where('fk_object', $item->rowid)->first();
+
+      if(isset($comments->rowid)){
+
+        CommandeDetailsExtra::create([
+          'fk_object'=>$detailId,
+          'observaciones'=>$comments->observaciones
+        ]);
+  
+      }
+    
     }
 
     ElementElement::create([
@@ -403,6 +438,7 @@ class CartController extends Controller
       'fk_target' => $commande->rowid,
       'targettype' => 'commande'
     ]);
+
 
     $request->session()->forget(['cart']);
 

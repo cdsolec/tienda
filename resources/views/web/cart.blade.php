@@ -62,6 +62,7 @@
 							</tr>
 						</thead>
 						<tbody class="w-full flex-1 sm:flex-none bg-white divide-y divide-gray-400 text-sm leading-5">
+							{{json_encode($cart)}}
 							@foreach($cart as $item)
 								@php
 									$subtotal['bs'] = $item['price'] * $tasa_usd * $item['quantity'];
@@ -81,7 +82,7 @@
 											<div class="leading-5 font-bold">
 												<p class="text-sm text-cdsolec-blue-light">{{ $item['label'] }}</p>
 												<p>Ref: {{ $item['ref'] }}</p>
-												<p><span class="inline-block">Comentario:</span> <input type="text" id="comentario" name="comentario" class=" inline-block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></p>
+												<p><span class="inline-block">Comentario:</span> <input type="text" id="comentario{{$item['id']}}" name="comentario{{$item['id']}}" class="txtComentario" data-id="{{$item['id']}}" value="{{$item['comment']??null}}"  class=" inline-block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></p>
 											</div>
 										</div>
 									</td>
@@ -92,7 +93,9 @@
 										<div class="px-3 py-2 lg:py-4 text-right">             
 											<div class="w-full flex pb-2">
 												<button type="button" class="px-3 py-2 border border-gray-500 font-semibold" data-action="decrement">-</button>
+
 												<input type="number" name="quantity" id="quantity{{ $item['id'] }}" min="0" max="{{ $item['stock'] }}" step="1" data-stock="{{ $item['stock'] }}" data-product="{{ $item['id'] }}" data-price="{{ $item['price'] }}" value="{{ $item['quantity'] }}" class="w-16 text-right px-3" onchange="validateRange(this)" />
+
 												<button type="button" class="px-3 py-2 border border-gray-500 font-semibold" data-action="increment">+</button>
 											</div>
 										</div>
@@ -292,6 +295,38 @@
 
 	@push('scripts')
 		<script>
+
+			$(document).on('blur', '.txtComentario', function(){
+
+				let comment = $(this).val();
+				let product = $(this).data('id');
+
+				const data = {};
+				data._method = 'PUT';
+				data.comment = comment;
+				data.quantity = 1;
+				const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+
+				fetch('/cart/' + product, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRF-Token": csrfToken
+					},
+					body: JSON.stringify(data),
+				})
+				.then((response) => response.json())
+				.then((data) => {
+					console.log("Success:", data);
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
+
+
+			})
+
+
 			function decrement(e) {
 				const btn = e.target.parentNode.parentElement.querySelector(
 					'button[data-action="decrement"]'

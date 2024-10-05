@@ -61,8 +61,6 @@ class BudgetController extends Controller
 
       $extra = PropalExtra::where('fk_object', $propal->rowid)->first();
 
-
-
       if(!isset($extra->rowid)){
         $extra = PropalExtra::create([
           'fk_object'=>$propal->rowid

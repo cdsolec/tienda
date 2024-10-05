@@ -65,4 +65,10 @@ class PropalDetail extends Model
   {
     return $this->belongsTo(Product::class, 'fk_product', 'rowid');
   }
+
+   
+  public function extrafields()
+  {
+    return $this->hasOne(PropalDetailExtra::class, 'fk_object', 'rowid');
+  }
 }

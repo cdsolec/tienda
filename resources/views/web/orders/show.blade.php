@@ -108,6 +108,9 @@
 											<div class="leading-5">
 												<p class="text-sm text-cdsolec-blue-light font-bold">{{ $item->description }}</p>
 												<p>Ref: {{ $item->label }}</p>
+												@if($item->extrafields?->observaciones)
+													<p>Observaciones: {{ $item->extrafields?->observaciones }}</p>
+												@endif
 											</div>
 										</div>
 									</td>

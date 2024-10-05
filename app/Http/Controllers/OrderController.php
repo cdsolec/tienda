@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderMail;
 use App\Models\Commande;
 use App\Models\CommandeExtra;
+use App\Models\CommandeDetailsExtra;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

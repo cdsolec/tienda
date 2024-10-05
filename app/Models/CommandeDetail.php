@@ -65,4 +65,9 @@ class CommandeDetail extends Model
   {
     return $this->belongsTo(Product::class, 'fk_product', 'rowid');
   }
+
+  public function extrafields()
+  {
+    return $this->hasOne(CommandeDetailsExtra::class, 'fk_object', 'rowid');
+  }
 }
