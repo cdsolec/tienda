@@ -17,6 +17,8 @@
 
 	@section('background', asset('img/slide1.jpg'))
 
+	@section('title',  'Compra')
+
 	@section('content')
 		<div class="container mx-auto px-6">
 			<h6 class="text-sm uppercase font-semibold tracking-widest text-blue-800">

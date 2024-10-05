@@ -16,6 +16,8 @@
 	@endpush
 
 	@section('background', asset('img/slide1.jpg'))
+	@section('title',  'Cotización')
+
 
 	@section('content')
 		<div class="container mx-auto px-6">

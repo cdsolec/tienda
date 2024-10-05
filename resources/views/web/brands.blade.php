@@ -1,5 +1,7 @@
-<x-web-layout title="Contacto">
+<x-web-layout title="Fabricantes">
 	@section('background', asset('img/slide3.jpg'))
+
+	@section('title',  'Fabricantes')
 
 	@section('content')
     <div class="container mx-auto px-6">

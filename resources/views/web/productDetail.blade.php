@@ -142,7 +142,7 @@
                     </button>
                 @else
                     <button type="button" class=" disabled px-4 py-1 font-semibold bg-gray-500 text-white uppercase text-xs">
-                        Agregar1 <i class="fas fa-shopping-cart"></i>
+                        Agregar <i class="fas fa-shopping-cart"></i>
                     </button>
                 @endif
             </form>

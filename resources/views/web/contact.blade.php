@@ -1,6 +1,9 @@
 <x-web-layout title="Contacto">
 	@section('background', asset('img/slide3.jpg'))
 
+	@section('title',  'Contacto')
+
+
 	@section('content')
     <div class="container mx-auto px-6">
 			<h6 class="text-sm uppercase font-semibold tracking-widest text-blue-800">
